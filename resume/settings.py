@@ -127,3 +127,5 @@ MIGRATION_MODULES = {
     "auth": "mongo_migrations.auth",
     "contenttypes": "mongo_migrations.contenttypes",
 }
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
