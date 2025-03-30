@@ -2,6 +2,7 @@ import string
 from typing import Tuple
 from accounts.models import BlackListEmail
 from django.core.mail import send_mail
+from django.contrib.auth.models import BaseUserManager
 
 
 def verify_email(email_str: str) -> Tuple[bool, str]:
@@ -10,6 +11,11 @@ def verify_email(email_str: str) -> Tuple[bool, str]:
     """
     if email_str == "" or email_str is None:
         return False, "Email address cannot be Null or Blank"
+
+    try:
+        email_str = BaseUserManager().normalize_email(email_str)
+    except Exception as e:
+        return False, f"{str(e)}"
 
     email_object = BlackListEmail.objects.filter(email=email_str).first()
 

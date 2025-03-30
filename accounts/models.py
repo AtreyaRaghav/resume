@@ -10,7 +10,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["password", "first_name", "last_name"]
+    REQUIRED_FIELDS = ["first_name", "last_name"]
 
     objects = UserManager()
 
@@ -24,7 +24,7 @@ class SetToken(models.Model):
     """
 
     token = models.CharField(max_length=80, unique=True)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
