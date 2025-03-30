@@ -4,11 +4,24 @@ from accounts.models import BlackListEmail
 from django.core.mail import send_mail
 from django.contrib.auth.models import BaseUserManager
 
+import secrets
+import string
+import inspect
+
+
+def generate_random_string(length=80) -> str:
+    alphabet = string.ascii_letters + string.digits + string.punctuation
+    return "".join(secrets.choice(alphabet) for _ in range(length))
+
 
 def verify_email(email_str: str) -> Tuple[bool, str]:
     """
     @sarvika.com
     """
+    caller = inspect.stack()[1]
+    print(email_str)
+    print(f"Called from function: {caller.function}")
+
     if email_str == "" or email_str is None:
         return False, "Email address cannot be Null or Blank"
 
@@ -27,6 +40,7 @@ def verify_email(email_str: str) -> Tuple[bool, str]:
     for domain in accepted_domains:
         # email is in accepted domain list and it length should be greater than domains length
         # malicious user may submit only the domain name
+        print("Interation in domain")
         if email_str.endswith(domain) and len(email_str) > len(domain):
             return True, "Accepted"
 

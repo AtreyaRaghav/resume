@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from accounts.models import User, SetToken, BlackListEmail
+
+admin.site.register(User)
+admin.site.register(SetToken)
+admin.site.register(BlackListEmail)
