@@ -1,6 +1,6 @@
 {% include "messages.html" %}
 
-<form method="post" action="">
+<form method="post" action="{% url 'register_user'%}">
     {% csrf_token %}
     <input type="email" placeholder="Enter email" > <br>
     <input type="first_name" placeholder="Enter first_name" > <br> 
