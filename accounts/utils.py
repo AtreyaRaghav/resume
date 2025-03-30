@@ -1,11 +1,19 @@
 import string
 from typing import Tuple
+from accounts.models import BlackListEmail
 
 
 def verify_email(email_str: str) -> Tuple[bool, str]:
     """
     @sarvika.com
     """
+    if email_str == "" or email_str is None:
+        return False, "Email address cannot be Null or Blank"
+
+    email_object = BlackListEmail.objects.filter(email=email_str).first()
+
+    if email_object is None:
+        return False, "Email is in Black List"
     accepted_domains = ["@sarvika.com"]
 
     for domain in accepted_domains:

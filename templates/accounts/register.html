@@ -1,0 +1,9 @@
+{% include "messages.html" %}
+
+<form method="post" action="">
+    {% csrf_token %}
+    <input type="email" placeholder="Enter email" > <br>
+    <input type="first_name" placeholder="Enter first_name" > <br> 
+    <input type="last_name" placeholder="Enter last_name" > <br>
+    <input type="submit" value="submit">
+</form>
