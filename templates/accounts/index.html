@@ -10,40 +10,42 @@
     </style>
 </head>
 <body>
-<form method="post" action="{% url 'file_upload' %}">
-    {% csrf_token %}
-
-    <button id="uploadButton" type="button">Open File Dialog</button>
-    <input type="file" id="fileInput" name="fileInput" style="display: none;" />
-    <div id="fileNameShow">
-
-    </div>
+<div id="toBehidden">
+    <form method="post" action="{% url 'file_upload' %}">
+        {% csrf_token %}
     
-    <img src="http://127.0.0.1:8000/media/image/download.jpg" id="spinner" style="display: none; z-index: 10;  text-align: center; height: auto; justify-content: center; align-items: center;" >
-    <input type="text" value="{{response_dict.first_name}}"><br>
-
-
-    {% for ele in response_dict.skills %}
-    <input type="text" name="skills" value="{{ele}}"><br>
-    {% endfor %}
-
-    {% for ele in response_dict.experience %}
-
+        <button id="uploadButton" type="button">Open File Dialog</button>
+        <input type="file" id="fileInput" name="fileInput" style="display: none;" />
+        <div id="fileNameShow">
+    
+        </div>
         
-        {% for key, value in ele.items %}
-
-        {{key}}  <input type="text" value="{{value}}" name="experience_{{forloop.counter0}}"><br>
+       
+        <input type="text" value="{{response_dict.first_name}}"><br>
+    
+    
+        {% for ele in response_dict.skills %}
+        <input type="text" name="skills" value="{{ele}}"><br>
         {% endfor %}
     
-    {% endfor%}
-<input type="submit">
-
+        {% for ele in response_dict.experience %}
+    
+            
+            {% for key, value in ele.items %}
+    
+            {{key}}  <input type="text" value="{{value}}" name="experience_{{forloop.counter0}}"><br>
+            {% endfor %}
+        
+        {% endfor%}
+    <input type="submit">
+    </form>
+</div>
 <script>
     // Get references to the button and file input elements
 const uploadButton = document.getElementById("uploadButton");
 const fileInput = document.getElementById("fileInput");
 const fileNameShow = document.getElementById("fileNameShow");
-const spinnerId = document.getElementById("spinner");
+const toBehidden = document.getElementById("toBehidden");
 // Add an event listener to the button to trigger the file input dialog
 uploadButton.addEventListener("click", function() {
     fileInput.click(); // This will open the file dialog
@@ -55,10 +57,19 @@ fileInput.addEventListener("change", function() {
     if (file) {
         fileNameShow.innerText = file.name;
         console.log("Selected file:", file.name);
-        spinnerId.style.display = "block";
+        const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                // Set the src of the iframe to the result (data URL)
+                pdfFrame.style.display = "block"; // Show the iframe
+                pdfFrame.src = event.target.result; // Set the src to the PDF data URL
+            };
+            
+            reader.readAsDataURL(file); 
+        toBehidden.innerHTML = "<img src='http://127.0.0.1:8000/media/image/download.jpg'><h2> hello</h2> <iframe id='pdfFrame' style='display: block;'></iframe>";
     }
 });
 
 </script>
-</form>
+
 </body>
