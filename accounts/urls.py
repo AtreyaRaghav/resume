@@ -7,6 +7,7 @@ from accounts.views import (
     set_password,
     logout_view,
     show,
+    file_upload,
 )
 
 urlpatterns = [
@@ -16,4 +17,5 @@ urlpatterns = [
     path("set-password/<str:token>/", set_password, name="set_password"),
     path("logout/", logout_view, name="logout_view"),
     path("show/", show, name="show"),
+    path("file-upload/", file_upload, name="file_upload"),
 ]

@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <head>
-
+    {% load static %}
+    <style>
+        #uploadButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+    </style>
 </head>
 <body>
-<form method="post">
+<form method="post" action="{% url 'file_upload' %}">
     {% csrf_token %}
+
+    <button id="uploadButton" type="button">Open File Dialog</button>
+    <input type="file" id="fileInput" name="fileInput" style="display: none;" />
+    <div id="fileNameShow">
+
+    </div>
+    
+    <img src="http://127.0.0.1:8000/media/image/download.jpg" id="spinner" style="display: none; z-index: 10;  text-align: center; height: auto; justify-content: center; align-items: center;" >
     <input type="text" value="{{response_dict.first_name}}"><br>
 
 
@@ -22,5 +37,28 @@
     
     {% endfor%}
 <input type="submit">
+
+<script>
+    // Get references to the button and file input elements
+const uploadButton = document.getElementById("uploadButton");
+const fileInput = document.getElementById("fileInput");
+const fileNameShow = document.getElementById("fileNameShow");
+const spinnerId = document.getElementById("spinner");
+// Add an event listener to the button to trigger the file input dialog
+uploadButton.addEventListener("click", function() {
+    fileInput.click(); // This will open the file dialog
+});
+
+// Optionally, you can add an event listener to handle file selection
+fileInput.addEventListener("change", function() {
+    const file = fileInput.files[0];
+    if (file) {
+        fileNameShow.innerText = file.name;
+        console.log("Selected file:", file.name);
+        spinnerId.style.display = "block";
+    }
+});
+
+</script>
 </form>
 </body>

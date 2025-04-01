@@ -160,3 +160,9 @@ def show(request: HttpRequest):
 #         return isinstance(value, eval(arg))
 #     except Exception:
 #         return False
+
+
+def file_upload(request: HttpRequest):
+    if request.method == "POST":
+        print(request.FILES.getlist("fileInput"))
+    return request("show")
