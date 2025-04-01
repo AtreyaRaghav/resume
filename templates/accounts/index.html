@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<head>
+
+</head>
+<body>
+<form method="post">
+    {% csrf_token %}
+    <input type="text" value="{{response_dict.first_name}}"><br>
+
+
+    {% for ele in response_dict.skills %}
+    <input type="text" name="skills" value="{{ele}}"><br>
+    {% endfor %}
+
+    {% for ele in response_dict.experience %}
+
+        
+        {% for key, value in ele.items %}
+
+        {{key}}  <input type="text" value="{{value}}" name="experience_{{forloop.counter0}}"><br>
+        {% endfor %}
+    
+    {% endfor%}
+<input type="submit">
+</form>
+</body>

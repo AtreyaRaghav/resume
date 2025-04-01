@@ -113,3 +113,50 @@ def set_password(request: HttpRequest, token: str):
 
 def logout_view(request: HttpRequest):
     pass
+
+
+def show(request: HttpRequest):
+
+    response_dict = dict()
+    response_dict["first_name"] = "Name"
+    response_dict["skills"] = ["Python", "Django", "Html", "Css"]
+    response_dict["experience"] = [
+        {"expe": "166", "pppe": "23322"},
+        {"expe": "100", "pppe": "909"},
+        {"expe": "1222", "pppe": "789"},
+        {"expe": "221", "pppe": "88"},
+    ]
+    if request.method == "POST":
+        # is instance method in django
+
+        for key in request.POST.keys():
+            print(request.POST.getlist(key), key)
+
+    return render(
+        request, "accounts/index.html", context={"response_dict": response_dict}
+    )
+
+
+# "Please generate and display a list of dictionaries, where each dictionary contains three keys: 'key1', 'key2', and 'key3'. The values associated with these keys can be any sample values."
+
+
+# {% load your_custom_filters %}
+
+# {% if my_list|isinstance_filter:"list" %}
+#     This is a list.
+# {% else %}
+#     This is not a list.
+# {% endif %}
+
+
+# # your_app/templatetags/your_custom_filters.py
+# from django import template
+
+# register = template.Library()
+
+# @register.filter
+# def isinstance_filter(value, arg):
+#     try:
+#         return isinstance(value, eval(arg))
+#     except Exception:
+#         return False
