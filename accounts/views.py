@@ -35,7 +35,9 @@ def forgot_password(request):
             return render(request, "error.html", context={"msg": is_valid_email[1]})
 
     return render(
-        request, "accounts/forgot_password.html", context={"msg": "forgot_password"}
+        request,
+        "accounts/forgot_password.html",
+        context={"msg": request.session["my_dict"]},
     )
 
 
@@ -94,10 +96,18 @@ def register_user(request: HttpRequest) -> Union[render, redirect]:
 
 
 def login_view(request: HttpRequest) -> render:
+    import time
+
+    time.sleep(1)
     """ """
     if request.method == "POST":
-
-        pass
+        request.session["my_dict"] = {
+            "key1": "value1",
+            "key1": "value1",
+            "key1": "value1",
+            "key1": "value1",
+        }
+        return redirect("forgot_password")
 
     return render(
         request, "accounts/login.html", context={"msg": "get request in login"}

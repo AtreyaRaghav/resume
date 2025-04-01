@@ -11,7 +11,7 @@
 </head>
 <body>
 <div id="toBehidden">
-    <form method="post" action="{% url 'file_upload' %}">
+    <form method="post" id="formSubmission" action="{% url 'file_upload' %}">
         {% csrf_token %}
     
         <button id="uploadButton" type="button">Open File Dialog</button>
@@ -46,6 +46,8 @@ const uploadButton = document.getElementById("uploadButton");
 const fileInput = document.getElementById("fileInput");
 const fileNameShow = document.getElementById("fileNameShow");
 const toBehidden = document.getElementById("toBehidden");
+const formSubmission = document.getElementById("formSubmission");
+
 // Add an event listener to the button to trigger the file input dialog
 uploadButton.addEventListener("click", function() {
     fileInput.click(); // This will open the file dialog
@@ -57,19 +59,45 @@ fileInput.addEventListener("change", function() {
     if (file) {
         fileNameShow.innerText = file.name;
         console.log("Selected file:", file.name);
-        const reader = new FileReader();
-            
-            reader.onload = function(event) {
-                // Set the src of the iframe to the result (data URL)
-                pdfFrame.style.display = "block"; // Show the iframe
-                pdfFrame.src = event.target.result; // Set the src to the PDF data URL
-            };
-            
-            reader.readAsDataURL(file); 
-        toBehidden.innerHTML = "<img src='http://127.0.0.1:8000/media/image/download.jpg'><h2> hello</h2> <iframe id='pdfFrame' style='display: block;'></iframe>";
     }
 });
 
+formSubmission.addEventListener("submit", function(event){
+        event.preventDefault();
+        const file = fileInput.files[0];
+        console.log(fileNameShow.innerText);
+        const reader = new FileReader();
+            
+        reader.onload = function(event) {
+                // Set the src of the iframe to the result (data URL)
+            pdfFrame.style.display = "block"; // Show the iframe
+            pdfFrame.src = event.target.result; // Set the src to the PDF data URL
+        };
+            
+        reader.readAsDataURL(file);
+        toBehidden.innerHTML = "<img src='http://127.0.0.1:8000/media/image/download.jpg'><h2> hello</h2> <iframe id='pdfFrame' style='display: block;'></iframe>";
+
+        const formData = new FormData(this);
+
+        fetch("{% url 'login' %}", {
+            method: "POST",
+            body: formData,
+
+        }).then(response => {
+            if(response.redirected){
+                window.location.href=response.url;
+            }
+             response.text()
+        })  // Ensure you call .text() properly
+        .then(text => {
+            alert(text);
+            toBehidden.innerHTML = text;  // Now you can log the response text
+        }).catch(error=>{
+            alert(error);
+            console.log(error);
+        })
+        
+})
 </script>
 
 </body>
