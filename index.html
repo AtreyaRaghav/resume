@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Column Visibility Toggle</title>
+    <style>
+        /* Style the button */
+        button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        /* Dropdown container (initially hidden) */
+        .dropdown {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            border: 1px solid #ddd;
+            z-index: 1;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+        }
+
+        /* Style each checkbox item */
+        .dropdown label {
+            display: block;
+            padding: 5px;
+        }
+
+        /* Hide column content initially */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Button to hover over to show the column toggler -->
+    <button id="showDropdownBtn">Show Column Options</button>
+
+    <!-- Dropdown to choose columns to show/hide -->
+    <div class="dropdown" id="columnDropdown">
+        <label><input type="checkbox" data-column="0" checked> Header 1</label>
+        <label><input type="checkbox" data-column="1" checked> Header 2</label>
+        <label><input type="checkbox" data-column="2" checked> Header 3</label>
+    </div>
+
+    <!-- Table -->
+    <table id="dataTable" border="1">
+        <thead>
+            <tr>
+                <th>Header 1</th>
+                <th>Header 2</th>
+                <th>Header 3</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Row 1, Cell 1</td>
+                <td>Row 1, Cell 2</td>
+                <td>Row 1, Cell 3</td>
+            </tr>
+            <tr>
+                <td>Row 2, Cell 1</td>
+                <td>Row 2, Cell 2</td>
+                <td>Row 2, Cell 3</td>
+            </tr>
+            <tr>
+                <td>Row 3, Cell 1</td>
+                <td>Row 3, Cell 2</td>
+                <td>Row 3, Cell 3</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        // Get elements
+        var dropdown = document.getElementById("columnDropdown");
+        var showDropdownBtn = document.getElementById("showDropdownBtn");
+
+        // Show the dropdown when the button is clicked
+        showDropdownBtn.addEventListener('click', function() {
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Function to toggle the visibility of the columns based on the checkbox selection
+        document.querySelectorAll('.dropdown input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                var columnIndex = this.getAttribute('data-column');
+                var table = document.getElementById("dataTable");
+                var rows = table.rows;
+                
+                // Loop through each row and show/hide the cell based on checkbox state
+                for (var i = 0; i < rows.length; i++) {
+                    var cell = rows[i].cells[columnIndex];
+                    if (this.checked) {
+                        cell.classList.remove('hidden'); // Show the column
+                    } else {
+                        cell.classList.add('hidden'); // Hide the column
+                    }
+                }
+            });
+        });
+
+        // Close dropdown when clicking anywhere else on the document
+        window.addEventListener('click', function(event) {
+            if (!dropdown.contains(event.target) && !showDropdownBtn.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        // Prevent dropdown from closing when clicking inside it
+        dropdown.addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+    </script>
+
+</body>
+</html>
