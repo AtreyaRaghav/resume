@@ -1,0 +1,42 @@
+{% for item in items %}
+    <div>{{ item.name }}</div>
+{% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if items.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ items.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ items.number }} of {{ items.paginator.num_pages }}.
+        </span>
+
+        {% if items.has_next %}
+            <a href="?page={{ items.next_page_number }}">next</a>
+            <a href="?page={{ items.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+
+from django.shortcuts import render
+from .models import Item
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+def item_list(request):
+    item_list = Item.objects.all()  # Get all items
+    paginator = Paginator(item_list, 10)  # Show 10 items per page
+
+    page = request.GET.get('page')  # Get the current page from the query string
+    try:
+        items = paginator.page(page)  # Get the items for the current page
+    except PageNotAnInteger:
+        # If the page is not an integer, deliver the first page
+        items = paginator.page(1)
+    except EmptyPage:
+        # If the page is out of range (e.g. 9999), deliver the last page
+        items = paginator.page(paginator.num_pages)
+
+    return render(request, 'item_list.html', {'items': items})
